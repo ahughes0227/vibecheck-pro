@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VibeCheck Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --success: #22c55e;
+            --error: #ef4444;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: var(--surface);
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header img {
+            max-width: 180px;
+            margin-bottom: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .header img:hover {
+            transform: scale(1.05);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            letter-spacing: -0.025em;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            margin: 8px 0;
+            font-size: 1.125rem;
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 48px;
+            text-align: center;
+            margin-bottom: 24px;
+            background-color: var(--background);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .drop-zone.dragover {
+            background-color: #eff6ff;
+            border-color: var(--primary-color);
+            transform: scale(1.02);
+        }
+
+        .drop-zone p {
+            margin: 12px 0;
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+        }
+
+        .button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .status {
+            display: none;
+            padding: 16px;
+            margin: 24px 0;
+            border-radius: 8px;
+            background-color: #eff6ff;
+            color: var(--primary-color);
+            font-weight: 500;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .error {
+            display: none;
+            padding: 16px;
+            margin: 24px 0;
+            border-radius: 8px;
+            background-color: #fef2f2;
+            color: var(--error);
+            font-weight: 500;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .success {
+            background-color: #f0fdf4;
+            color: var(--success);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .file-info {
+            margin-top: 16px;
+            padding: 16px;
+            background-color: var(--background);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .file-info p {
+            color: var(--text-secondary);
+            margin: 4px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background-color: var(--border);
+            border-radius: 2px;
+            margin-top: 16px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="skywater_logo.png" alt="Skywater Logo">
+            <h1>VibeCheck Pro</h1>
+            <p>Professional Vibration Analysis Tool</p>
+        </div>
+
+        <div id="dropZone" class="drop-zone">
+            <p>Drag and drop your IDE file here</p>
+            <p>or</p>
+            <button id="selectFileBtn" class="button">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Select File
+            </button>
+        </div>
+
+        <div id="fileInfo" class="file-info">
+            <p>Selected file: <span id="fileName"></span></p>
+            <p>File size: <span id="fileSize"></span></p>
+        </div>
+
+        <div id="status" class="status">
+            Analyzing file...
+        </div>
+
+        <div id="error" class="error">
+            <span></span>
+        </div>
+
+        <div id="progressBar" class="progress-bar">
+            <div id="progressBarFill" class="progress-bar-fill"></div>
+        </div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        
+        const dropZone = document.getElementById('dropZone');
+        const selectFileBtn = document.getElementById('selectFileBtn');
+        const status = document.getElementById('status');
+        const error = document.getElementById('error');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarFill = document.getElementById('progressBarFill');
+
+        // Handle file selection
+        selectFileBtn.addEventListener('click', async () => {
+            const filePath = await ipcRenderer.invoke('select-file');
+            if (filePath) {
+                handleFile(filePath);
+            }
+        });
+
+        // Handle drag and drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.ide')) {
+                handleFile(file.path);
+            } else {
+                showError('Please select a valid IDE file');
+            }
+        });
+
+        async function handleFile(filePath) {
+            try {
+                status.style.display = 'block';
+                error.style.display = 'none';
+                progressBar.style.display = 'block';
+                
+                // Update file info
+                const file = await ipcRenderer.invoke('get-file-info', filePath);
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                fileInfo.style.display = 'block';
+
+                // Simulate progress
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += 5;
+                    progressBarFill.style.width = `${progress}%`;
+                    if (progress >= 100) clearInterval(progressInterval);
+                }, 200);
+
+                const result = await ipcRenderer.invoke('analyze-file', filePath);
+                
+                if (result.success) {
+                    showError(`Analysis complete! Report saved to: ${result.path}`, 'success');
+                } else {
+                    showError(result.error);
+                }
+            } catch (err) {
+                showError(err.message);
+            } finally {
+                status.style.display = 'none';
+                progressBar.style.display = 'none';
+                progressBarFill.style.width = '0%';
+            }
+        }
+
+        function showError(message, type = 'error') {
+            error.style.display = 'block';
+            error.querySelector('span').textContent = message;
+            
+            if (type === 'success') {
+                error.className = 'error success';
+            } else {
+                error.className = 'error';
+            }
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html> 
