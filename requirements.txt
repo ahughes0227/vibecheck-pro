@@ -6,7 +6,5 @@ matplotlib
 seaborn
 Pillow
 numpy
-reportlab
 plotly
-kaleido
 python-dotenv

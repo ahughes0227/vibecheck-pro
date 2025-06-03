@@ -38,10 +38,12 @@ def analyze_endaq(file_path):
         # Calculate the VC curves for the 25g and 40g channels
         print("Calculating VC curves for 25g channel...")
         vc_25g = endaq.calc.psd.vc_curves(psd_25g, fstart=1.0, octave_bins=3)
-        
+        vc_25g.rename(columns=lambda c: c.split()[0], inplace=True)
+
         if not skip_40g:
             print("Calculating VC curves for 40g channel...")
             vc_40g = endaq.calc.psd.vc_curves(psd_40g, fstart=1.0, octave_bins=3)
+            vc_40g.rename(columns=lambda c: c.split()[0], inplace=True)
         else:
             vc_40g = None
 

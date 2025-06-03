@@ -11,7 +11,6 @@ from pathlib import Path
 from flask_server import app as flask_app
 from vc_analyzer_endaq import analyze_endaq
 from vc_plot_sensor_data import create_vc_plots_plotly
-from vc_generate_pdf import build_pdf_report
 from vc_config import VC_THRESHOLDS
 
 REAL_IDE = os.path.join(os.path.dirname(__file__), 'DAQ50971.IDE')
@@ -47,24 +46,12 @@ def test_analyze_endaq_runs(mock_analysis_results):
             assert all(isinstance(x, (int, float)) for x in df.index)
 
 def test_plot_generation_runs(tmp_path):
-    """Test plot generation and verify PNG files are created (real IDE)."""
-    create_vc_plots_plotly(REAL_IDE, str(tmp_path))
-    # Plots are saved to a shared temp dir, but also check tmp_path for safety
-    pngs = list(Path(tempfile.gettempdir()).glob('VibeCheckPro_Plots_Temp/*.png'))
-    if not pngs:
-        pngs = list(tmp_path.glob('*.png'))
-    assert len(pngs) > 0
-    for png in pngs:
-        assert png.stat().st_size > 0
+    """Test plot generation and verify HTML output (real IDE)."""
+    html_out = tmp_path / 'report.html'
+    assert create_vc_plots_plotly(REAL_IDE, str(html_out))
+    assert html_out.exists()
+    assert html_out.stat().st_size > 0
 
-def test_pdf_generation_runs(tmp_path):
-    """Test PDF generation and verify content (real IDE)."""
-    pdf_path = tmp_path / 'report.pdf'
-    build_pdf_report(REAL_IDE, str(pdf_path))
-    assert pdf_path.exists()
-    assert pdf_path.stat().st_size > 0
-    with open(pdf_path, 'rb') as f:
-        assert f.read(4) == b'%PDF'
 
 def test_api_health(client):
     rv = client.get('/api/health')
@@ -77,9 +64,8 @@ def test_api_analyze(client):
         data = {'file': (f, 'DAQ50971.IDE')}
         rv = client.post('/api/analyze', data=data, content_type='multipart/form-data')
     assert rv.status_code == 200
-    resp_json = rv.get_json()
-    assert resp_json['status'] == 'success'
-    assert 'url' in resp_json
+    assert rv.mimetype == 'text/html'
+    assert rv.data.lstrip().startswith(b'<!DOCTYPE html')
 
 def test_vc_thresholds():
     assert isinstance(VC_THRESHOLDS, dict)
