@@ -77,7 +77,9 @@ def test_api_analyze(client):
         data = {'file': (f, 'DAQ50971.IDE')}
         rv = client.post('/api/analyze', data=data, content_type='multipart/form-data')
     assert rv.status_code == 200
-    assert rv.data[:4] == b'%PDF'
+    resp_json = rv.get_json()
+    assert resp_json['status'] == 'success'
+    assert 'url' in resp_json
 
 def test_vc_thresholds():
     assert isinstance(VC_THRESHOLDS, dict)

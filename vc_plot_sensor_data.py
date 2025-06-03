@@ -257,7 +257,7 @@ def create_vc_plots_plotly(ide_path: str, html_out: str) -> bool:
             """)
 
         # Combine everything into the final HTML
-    html = f"""
+        html = f"""
 <!DOCTYPE html>
 <html lang="en">
 <head>
