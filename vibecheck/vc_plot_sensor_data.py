@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 # Imports – ensure your local helper + config modules are available
 # -----------------------------------------------------------------------------
 try:
-    from vc_analyzer_endaq import analyze_endaq
-    from vc_config import (
+    from .vc_analyzer_endaq import analyze_endaq
+    from .vc_config import (
         VC_THRESHOLDS,
         COLOR_PALETTE,
         DEFAULT_DPI,          # dots‑per‑inch for pixel conversion

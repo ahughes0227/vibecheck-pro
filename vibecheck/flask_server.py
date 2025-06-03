@@ -8,8 +8,8 @@ import time
 from pathlib import Path
 from flask import Flask, request, send_file, jsonify
 from werkzeug.utils import secure_filename
-from vc_analyzer_endaq import analyze_endaq
-from vc_plot_sensor_data import create_vc_plots_plotly
+from .vc_analyzer_endaq import analyze_endaq
+from .vc_plot_sensor_data import create_vc_plots_plotly
 
 # Configure logging
 logging.basicConfig(

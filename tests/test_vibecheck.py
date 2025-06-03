@@ -8,10 +8,10 @@ import shutil
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from flask_server import app as flask_app
-from vc_analyzer_endaq import analyze_endaq
-from vc_plot_sensor_data import create_vc_plots_plotly
-from vc_config import VC_THRESHOLDS
+from vibecheck.flask_server import app as flask_app
+from vibecheck.vc_analyzer_endaq import analyze_endaq
+from vibecheck.vc_plot_sensor_data import create_vc_plots_plotly
+from vibecheck.vc_config import VC_THRESHOLDS
 
 REAL_IDE = os.path.join(os.path.dirname(__file__), 'DAQ50971.IDE')
 
@@ -90,7 +90,7 @@ def test_analysis_data_quality(mock_analysis_results):
 
 def test_lowest_vc_passed():
     """Verify _lowest_vc_passed returns the expected VC level."""
-    from vc_generate_pdf import _lowest_vc_passed
+    from vibecheck.vc_generate_pdf import _lowest_vc_passed
 
     thresholds = {'VC-A': 0.05, 'VC-B': 0.1, 'VC-C': 0.2}
     arr = np.array([0.04, 0.05])
@@ -103,7 +103,7 @@ def test_lowest_vc_passed():
 
 def test_allowed_file():
     """Ensure allowed_file only permits IDE files."""
-    from flask_server import allowed_file
+    from vibecheck.flask_server import allowed_file
 
     assert allowed_file('sample.IDE')
     assert allowed_file('demo.ide')

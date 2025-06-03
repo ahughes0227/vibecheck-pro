@@ -53,7 +53,7 @@ function createWindow() {
       nodeIntegration: true,
       contextIsolation: false
     },
-    icon: path.join(__dirname, 'vc_analyzer_icon.png'),
+    icon: path.join(__dirname, 'assets', 'vc_analyzer_icon.png'),
     titleBarStyle: 'hiddenInset',
     backgroundColor: '#f8fafc'
   });
@@ -75,7 +75,7 @@ function createWindow() {
 function startFlaskServer() {
   try {
     const pythonPath = getPythonPath();
-    const flaskScript = path.join(__dirname, 'flask_server.py');
+    const flaskScript = path.join(__dirname, 'vibecheck', 'flask_server.py');
 
     console.log('Starting Flask server with Python:', pythonPath);
     console.log('Flask script path:', flaskScript);
