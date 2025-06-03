@@ -1,49 +1,74 @@
 # VibeCheck Pro
 
-VibeCheck Pro is a powerful, cross-platform vibration analysis tool for engineers, technicians, and researchers. Built with Electron and Python, it enables you to analyze sensor data, generate detailed interactive reports, and visualize vibration patterns for predictive maintenance, quality control, and research applications.
+VibeCheck Pro is a cross‑platform vibration analysis suite combining an Electron user interface with a Python back end. It allows engineers and researchers to inspect `.IDE` sensor files, visualize vibration levels and generate detailed interactive reports. Use it for predictive maintenance, quality control or any workflow that requires quick insight into vibration data.
+
+---
 
 ## Features
-- **Cross-Platform:** Works on Windows, macOS, and Linux
-- **Real-Time Analysis:** Instantly process and visualize sensor data
-- **Interactive HTML Reports:** Generate professional, interactive reports with Plotly graphs
-- **Modern UI:** Clean, intuitive interface for easy data interpretation
-- **Python-Powered:** Leverages Python's scientific libraries for accurate analysis
-- **Auto-Update:** Seamless updates via GitHub releases
+
+* **Cross‑platform:** runs on Windows, macOS and Linux
+* **Real‑time analysis:** immediately process uploaded sensor files
+* **Interactive HTML reports:** Plotly graphs with zoom/pan capabilities
+* **Modern UI:** drag‑and‑drop file upload with a clean layout
+* **Python‑powered:** uses scientific libraries for accurate calculations
+* **Auto‑update:** built‑in updater via GitHub releases
 
 ## Tech Stack
-- **Frontend:** Electron, HTML/CSS/JavaScript
-- **Backend:** Python (Flask), Pandas, Matplotlib, Plotly
-- **Data Processing:** NumPy, SciPy, Endaq
-- **Reporting:** Plotly, ReportLab
+
+* **Frontend:** Electron with HTML/CSS/JavaScript
+* **Backend:** Flask (Python)
+* **Data processing:** NumPy, SciPy, pandas, endaq
+* **Reporting:** Plotly, ReportLab
+
+## Directory Structure
+
+```
+├── main.js               # Electron entry point
+├── flask_server.py       # Flask API for file upload/analysis
+├── vc_analyzer_endaq.py  # IDE data extraction and VC calculations
+├── vc_plot_sensor_data.py# Report and plot generation
+├── vc_generate_pdf.py    # Create PDF reports from results
+├── vc_config.py          # Central configuration and thresholds
+├── tests/                # Pytest suite with sample IDE file
+└── user_guide.html       # Step‑by‑step usage instructions
+```
 
 ## Installation
+
 1. **Download the latest release** from the [GitHub Releases page](https://github.com/AHughes0227/vibecheck-pro/releases).
-2. **Run the installer** for your platform (Windows, macOS, or Linux).
-3. **Launch VibeCheck Pro** and start analyzing your vibration data!
+2. **Run the installer** for your platform (Windows, macOS or Linux).
+3. **Launch VibeCheck Pro** and start analyzing data.
+
+For development, clone the repo and install the Node.js and Python dependencies:
+
+```bash
+git clone https://github.com/AHughes0227/vibecheck-pro.git
+cd vibecheck-pro
+npm install
+pip install -r requirements.txt
+```
 
 ## Usage
-1. Open VibeCheck Pro.
-2. Upload your `.IDE` sensor data file.
-3. View interactive vibration analysis and download HTML reports.
-4. Use the auto-update feature to stay up to date with the latest improvements.
 
-## Development
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/AHughes0227/vibecheck-pro.git
-   cd vibecheck-pro
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the app in development mode:
-   ```bash
-   npm run dev
-   ```
+1. Start the application (or run `npm run dev` during development).
+2. Drag and drop an `.IDE` file or choose **Add File(s)** in the interface.
+3. View the generated interactive report in your browser and optionally export a PDF.
+4. Check `user_guide.html` for a more detailed walkthrough of features.
+
+## Testing
+
+Run the Python test suite with `pytest`:
+
+```bash
+pytest -q
+```
+
+The tests cover HTML report creation, Flask API endpoints and VC threshold calculations. A sample IDE file is included under `tests/`.
 
 ## Contributing
-Contributions are welcome! Please open an issue or submit a pull request.
+
+Contributions and bug reports are welcome! Feel free to open an issue or submit a pull request if you have improvements or new features.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for full details.
