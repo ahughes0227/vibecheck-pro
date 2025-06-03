@@ -24,6 +24,7 @@ try:
         DEFAULT_DPI,          # dots‑per‑inch for pixel conversion
     )
     import plotly.graph_objects as go
+    import plotly
 except ImportError as e:
     logger.error(f"❌ Import error: {e}")
     logger.error("Make sure vc_analyzer_endaq.py, vc_config.py, and the 'plotly' + 'kaleido' libs are installed.")
