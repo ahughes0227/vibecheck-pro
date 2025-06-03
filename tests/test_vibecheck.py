@@ -90,7 +90,7 @@ def test_analysis_data_quality(mock_analysis_results):
 
 def test_lowest_vc_passed():
     """Verify _lowest_vc_passed returns the expected VC level."""
-    from vc_generate_pdf import _lowest_vc_passed
+    from vibecheck.vc_generate_pdf import _lowest_vc_passed
 
     thresholds = {'VC-A': 0.05, 'VC-B': 0.1, 'VC-C': 0.2}
     arr = np.array([0.04, 0.05])
