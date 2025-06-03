@@ -85,4 +85,26 @@ def test_analysis_data_quality(mock_analysis_results):
                     values = df[col].values
                     assert not np.any(np.isnan(values))
                     assert not np.any(np.isinf(values))
-                    assert np.all(values >= 0) 
+                    assert np.all(values >= 0)
+
+
+def test_lowest_vc_passed():
+    """Verify _lowest_vc_passed returns the expected VC level."""
+    from vc_generate_pdf import _lowest_vc_passed
+
+    thresholds = {'VC-A': 0.05, 'VC-B': 0.1, 'VC-C': 0.2}
+    arr = np.array([0.04, 0.05])
+    assert _lowest_vc_passed(arr, thresholds) == 'VC-A'
+    arr = np.array([0.09, 0.08])
+    assert _lowest_vc_passed(arr, thresholds) == 'VC-B'
+    arr = np.array([0.25])
+    assert _lowest_vc_passed(arr, thresholds) is None
+
+
+def test_allowed_file():
+    """Ensure allowed_file only permits IDE files."""
+    from flask_server import allowed_file
+
+    assert allowed_file('sample.IDE')
+    assert allowed_file('demo.ide')
+    assert not allowed_file('not.txt')

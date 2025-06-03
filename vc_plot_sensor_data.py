@@ -25,6 +25,7 @@ try:
     )
     import plotly
     import plotly.graph_objects as go
+    import plotly
 except ImportError as e:
     logger.error(f"❌ Import error: {e}")
     logger.error("Make sure vc_analyzer_endaq.py, vc_config.py, and the 'plotly' + 'kaleido' libs are installed.")
@@ -103,7 +104,7 @@ LABEL_X_POS = 99          # place labels inside 1‑100 Hz plot range
 
 def create_vc_plots_plotly(ide_path: str, html_out: str) -> bool:
     """
-    Analyse an enDAQ .IDE file and generate interactive VC‑curve plots.
+    Analyze an enDAQ .IDE file and generate interactive VC‑curve plots.
     Returns True if successful, False otherwise.
     """
     if not os.path.exists(ide_path):
@@ -156,8 +157,9 @@ def create_vc_plots_plotly(ide_path: str, html_out: str) -> bool:
 
         positives = [v for v in VC_THRESHOLDS.values() if v > 0]
         for ax in ("X", "Y", "Z"):
-            if ax in df.columns:
-                positives.extend(df[ax].to_numpy())
+            cols = [c for c in df.columns if c.startswith(ax)]
+            if cols:
+                positives.extend(df[cols[0]].to_numpy())
         if not positives:
             logger.warning(f"No positive values found for {name}")
             continue
@@ -166,10 +168,11 @@ def create_vc_plots_plotly(ide_path: str, html_out: str) -> bool:
         y_range_log = [np.log10(ymin), np.log10(ymax)]
 
         for ax in ("X", "Y", "Z"):
-            if ax not in df.columns:
+            cols = [c for c in df.columns if c.startswith(ax)]
+            if not cols:
                 continue
             freqs = df.index.to_numpy()
-            vel_mm_s = df[ax].to_numpy()
+            vel_mm_s = df[cols[0]].to_numpy()
             if len(freqs) == 0 or len(vel_mm_s) == 0:
                 logger.warning(f"No data points for {name} - {ax}")
                 continue
@@ -238,6 +241,17 @@ def create_vc_plots_plotly(ide_path: str, html_out: str) -> bool:
             figs.append(fig)
 
             logger.info(f"✓ Generated figure: {name} – {ax}")
+
+            # Save a PNG snapshot for PDF reports
+            try:
+                img_dir = os.path.join(tempfile.gettempdir(), TEMP_PLOT_DIR_NAME)
+                os.makedirs(img_dir, exist_ok=True)
+                stem = os.path.splitext(os.path.basename(ide_path))[0]
+                safe_name = name.replace(" ", "_")
+                png_path = os.path.join(img_dir, f"{stem}_{safe_name}_{ax}.png")
+                fig.write_image(png_path, width=FIGURE_WIDTH_PX, height=600)
+            except Exception as e:
+                logger.warning(f"Failed to write PNG for {name}-{ax}: {e}")
 
     if not figs:
         logger.error("No figures were generated. Check sensor data and processing.")

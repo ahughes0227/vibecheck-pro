@@ -106,10 +106,10 @@ COLOR_PALETTE = {
 }
 
 # --- Debug Configuration ---
-# To use hardcoded paths for debugging vc_analyzer_main.py directly,
+# To use hardcoded paths for debugging vc_analyzer_endaq.py directly,
 # uncomment and set the following variables with YOUR ACTUAL PATHS.
 # When DEBUG_FILE_PATHS is not None (and the others are set),
-# vc_analyzer_main.py will use these values.
+# vc_analyzer_endaq.py will use these values.
 
 # Example (replace with your actual paths):
 # DEBUG_FILE_PATHS = [
