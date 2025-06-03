@@ -51,14 +51,9 @@ DEFAULT_COLORS = [
     '#17becf'   # Cyan
 ]
 
-# --- PDF Report Settings ---
-# Default title for PDF reports
+# --- Report Metadata ---
 DEFAULT_REPORT_TITLE = "VibeCheck Pro Analysis Report"
-
-# Default author for PDF reports
 DEFAULT_REPORT_AUTHOR = "VibeCheck Pro"
-
-# Default subject for PDF reports
 DEFAULT_REPORT_SUBJECT = "Vibration Analysis Report"
 
 # --- Logging Settings ---
@@ -97,7 +92,7 @@ VC_THRESHOLDS = {
     'VC-F': 1.56 * UMS_TO_MM_S,
 }
 
-# --- Color Palette for Plots and PDF ---
+# --- Color Palette for Plots ---
 COLOR_PALETTE = {
     'X': '#1b9e77',      # Teal
     'Y': '#d95f02',      # Orange

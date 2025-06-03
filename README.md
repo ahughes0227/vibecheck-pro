@@ -24,7 +24,7 @@ VibeCheck Pro is a powerful, cross-platform vibration analysis tool for engineer
 ## Usage
 1. Open VibeCheck Pro.
 2. Upload your `.IDE` sensor data file.
-3. View interactive vibration analysis and download HTML or PDF reports.
+3. View interactive vibration analysis and download HTML reports.
 4. Use the auto-update feature to stay up to date with the latest improvements.
 
 ## Development

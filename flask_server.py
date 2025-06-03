@@ -10,7 +10,6 @@ from flask import Flask, request, send_file, jsonify
 from werkzeug.utils import secure_filename
 from vc_analyzer_endaq import analyze_endaq
 from vc_plot_sensor_data import create_vc_plots_plotly
-from vc_generate_pdf import build_pdf_report
 
 # Configure logging
 logging.basicConfig(
@@ -75,24 +74,16 @@ def analyze():
         try:
             # Save uploaded file
             file_path = os.path.join(temp_dir, secure_filename(file.filename))
-        file.save(file_path)
+            file.save(file_path)
             logger.info(f"File saved to: {file_path}")
             
             # Generate HTML report
             html_path = os.path.join(temp_dir, 'report.html')
-            
+
             if not create_vc_plots_plotly(file_path, html_path):
                 return jsonify({"error": "Failed to generate report"}), 500
 
-            # Launch Chrome with the report
-            url = f'http://localhost:5001/view/{os.path.basename(html_path)}'
-            threading.Thread(target=launch_chrome, args=(url,)).start()
-
-            return jsonify({
-                "status": "success",
-                "message": "Report generated and opened in Chrome",
-                "url": url
-            })
+            return send_file(html_path, mimetype='text/html')
 
         except Exception as e:
             logger.error(f"Error during processing: {str(e)}")

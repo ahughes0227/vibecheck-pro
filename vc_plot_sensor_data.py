@@ -23,6 +23,7 @@ try:
         COLOR_PALETTE,
         DEFAULT_DPI,          # dots‑per‑inch for pixel conversion
     )
+    import plotly
     import plotly.graph_objects as go
 except ImportError as e:
     logger.error(f"❌ Import error: {e}")
@@ -90,11 +91,8 @@ def safe_write_file(filepath: str, content: str) -> bool:
 # Figure sizing – 10 in wide (good for US‑letter / A4 print margins)
 TARGET_WIDTH_IN = 10.0
 DPI = DEFAULT_DPI if "DEFAULT_DPI" in globals() else 96
+# Pixel width for Plotly figures
 FIGURE_WIDTH_PX = int(TARGET_WIDTH_IN * DPI)
-
-# Shared temporary directory for plots
-TEMP_PLOT_DIR_NAME = "VibeCheckPro_Plots_Temp"
-
 # Annotation positioning constants
 LABEL_YSHIFT_PX = 0.5       # vertical gap below dashed line (in pixels)
 LABEL_X_POS = 99          # place labels inside 1‑100 Hz plot range
@@ -111,6 +109,13 @@ def create_vc_plots_plotly(ide_path: str, html_out: str) -> bool:
     if not os.path.exists(ide_path):
         logger.error(f"IDE file not found: {ide_path}")
         return False
+
+    # If output path is a directory, place report inside it
+    if os.path.isdir(html_out):
+        html_out = os.path.join(
+            html_out,
+            f"{os.path.splitext(os.path.basename(ide_path))[0]}_vc_plots.html",
+        )
 
     # ── 1. Extract sensor data ────────────────────────────────────────────────
     try:
@@ -231,6 +236,7 @@ def create_vc_plots_plotly(ide_path: str, html_out: str) -> bool:
             fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor="LightGray", tickfont=dict(size=18))
             fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor="LightGray", tickfont=dict(size=18))
             figs.append(fig)
+
             logger.info(f"✓ Generated figure: {name} – {ax}")
 
     if not figs:
@@ -256,7 +262,7 @@ def create_vc_plots_plotly(ide_path: str, html_out: str) -> bool:
             """)
 
         # Combine everything into the final HTML
-    html = f"""
+        html = f"""
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -290,6 +296,7 @@ def create_vc_plots_plotly(ide_path: str, html_out: str) -> bool:
     </style>
     <script type="text/javascript">
         {plotly_js}
+
     </script>
 </head>
 <body>
