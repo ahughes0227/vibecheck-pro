@@ -106,7 +106,7 @@ LABEL_X_POS = 99          # place labels inside 1‑100 Hz plot range
 
 def create_vc_plots_plotly(ide_path: str, html_out: str) -> bool:
     """
-    Analyse an enDAQ .IDE file and generate interactive VC‑curve plots.
+    Analyze an enDAQ .IDE file and generate interactive VC‑curve plots.
     Returns True if successful, False otherwise.
     """
     if not os.path.exists(ide_path):
