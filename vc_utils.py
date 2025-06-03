@@ -10,7 +10,7 @@ import tempfile
 import shutil
 from pathlib import Path
 
-# --- Define AppName for consistency (matches vc_analyzer_main.py) ---
+# --- Define AppName for consistency (matches vc_analyzer_endaq.py) ---
 APP_NAME = "VibeCheckPro"
 
 # File size limits
