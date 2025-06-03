@@ -75,7 +75,7 @@ def analyze():
         try:
             # Save uploaded file
             file_path = os.path.join(temp_dir, secure_filename(file.filename))
-        file.save(file_path)
+            file.save(file_path)
             logger.info(f"File saved to: {file_path}")
             
             # Generate HTML report
