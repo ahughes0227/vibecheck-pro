@@ -8,10 +8,10 @@ import shutil
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from flask_server import app as flask_app
-from vc_analyzer_endaq import analyze_endaq
-from vc_plot_sensor_data import create_vc_plots_plotly
-from vc_config import VC_THRESHOLDS
+from vibecheck.flask_server import app as flask_app
+from vibecheck.vc_analyzer_endaq import analyze_endaq
+from vibecheck.vc_plot_sensor_data import create_vc_plots_plotly
+from vibecheck.vc_config import VC_THRESHOLDS
 
 REAL_IDE = os.path.join(os.path.dirname(__file__), 'DAQ50971.IDE')
 
@@ -103,7 +103,7 @@ def test_lowest_vc_passed():
 
 def test_allowed_file():
     """Ensure allowed_file only permits IDE files."""
-    from flask_server import allowed_file
+    from vibecheck.flask_server import allowed_file
 
     assert allowed_file('sample.IDE')
     assert allowed_file('demo.ide')

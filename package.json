@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "dev": "concurrently \"npm run start-flask\" \"npm run start-electron\"",
-    "start-flask": "python flask_server.py",
+    "start-flask": "python -m vibecheck.flask_server",
     "start-electron": "electron .",
     "prebuild": "rm -rf dist/ python-env/",
     "build": "electron-builder && node build/bundle-python.js",

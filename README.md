@@ -23,12 +23,16 @@ VibeCheck Pro is a cross‑platform vibration analysis suite combining an Electr
 ## Directory Structure
 
 ```
+├── vibecheck/            # Python package with analysis code
+│   ├── flask_server.py   # Flask API for file upload/analysis
+│   ├── vc_analyzer_endaq.py
+│   ├── vc_plot_sensor_data.py
+│   ├── vc_generate_pdf.py
+│   ├── vc_config.py
+│   └── vc_utils.py
+├── assets/               # Application icons and logos
 ├── main.js               # Electron entry point
-├── flask_server.py       # Flask API for file upload/analysis
-├── vc_analyzer_endaq.py  # IDE data extraction and VC calculations
-├── vc_plot_sensor_data.py# Report and plot generation
-├── vc_generate_pdf.py    # Create PDF reports from results
-├── vc_config.py          # Central configuration and thresholds
+├── index.html            # Electron UI
 ├── tests/                # Pytest suite with sample IDE file
 └── user_guide.html       # Step‑by‑step usage instructions
 ```
