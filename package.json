@@ -10,6 +10,7 @@
     "start-electron": "electron .",
     "prebuild": "rm -rf dist/ python-env/",
     "build": "electron-builder && node build/bundle-python.js",
+    "release": "node scripts/release.js",
     "postinstall": "electron-builder install-app-deps",
     "publish": "npm run prebuild && electron-builder -p always && node build/bundle-python.js",
     "lint": "eslint .",
