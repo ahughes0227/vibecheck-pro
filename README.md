@@ -59,6 +59,16 @@ pip install -r requirements.txt
 3. View the generated interactive report in your browser and optionally export a PDF.
 4. Check `user_guide.html` for a more detailed walkthrough of features.
 
+## Build a Release
+
+Create a production-ready bundle and generate a clean `release/` directory with:
+
+```bash
+npm run release -- --zip
+```
+
+This runs the Electron build, strips development files and packages the output as `release.zip`.
+
 ## Testing
 
 Run the Python test suite with `pytest`:
